@@ -15,10 +15,9 @@
         {
             using (var writer = File.AppendText(fileName))
             {
-                writer.WriteLine("Here is a list of your recent purchases: ");
                 if(price>0)
                 {
-                    writer.WriteLine(price);
+                    writer.WriteLine($"{Category} {Name} {price}");
                     if(PriceAdded!=null)
                     {
                         PriceAdded(this, new EventArgs());
@@ -59,22 +58,31 @@
         public override Statistics GetStatistics()
         {
             var pricesFromFile = ReadPricesFromFile();
-            var result = this.CountStatistic(pricesFromFile);
+            var result = CountStatistic(pricesFromFile);
             return result;
         }
 
         private List<float> ReadPricesFromFile()
         {
             var prices = new List<float>();
-            if (File.Exists($"{fileName}"))
+            if (File.Exists(fileName))
             {
-                using (var reader = File.OpenText($"{fileName}"))
+                using (var reader = File.OpenText(fileName))
                 {
                     var line = reader.ReadLine();
-                    while (line != null)
+                    while ((line = reader.ReadLine()) != null)
                     {
-                        var number = float.Parse(line);
-                        prices.Add(number);
+                        var data = line.Split(' ');
+                        if (data.Length == 3)
+                        {
+                            var category = data[0];
+                            var name = data[1];
+                            var price = float.Parse(data[2]);
+                            if (category == Category && name == Name)
+                            {
+                                prices.Add(price);
+                            }
+                        }
                         line = reader.ReadLine();
                     }
                 }

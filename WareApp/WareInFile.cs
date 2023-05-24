@@ -13,20 +13,21 @@
 
         public override void AddPrice(float price)
         {
-            using (var writer = File.AppendText(fileName))
+            if (price > 0)
             {
-                if(price>0)
+                this.prices.Add(price);
+                using (var writer = File.AppendText(fileName))
                 {
-                    writer.WriteLine($"{Category} {Name} {price}");
-                    if(PriceAdded!=null)
+                    writer.WriteLine($"{price}");
+                    if (PriceAdded != null)
                     {
                         PriceAdded(this, new EventArgs());
                     }
                 }
-                else
-                {
-                    throw new Exception("Invalid price value.");
-                }
+            }
+            else
+            {
+                throw new Exception("Invalid price value.");
             }
         }
 
@@ -57,8 +58,7 @@
 
         public override Statistics GetStatistics()
         {
-            var pricesFromFile = ReadPricesFromFile();
-            var result = CountStatistic(pricesFromFile);
+            var result = CountStatistic(prices);
             return result;
         }
 
@@ -70,19 +70,10 @@
                 using (var reader = File.OpenText(fileName))
                 {
                     var line = reader.ReadLine();
-                    while ((line = reader.ReadLine()) != null)
+                    while (line != null)
                     {
-                        var data = line.Split(' ');
-                        if (data.Length == 3)
-                        {
-                            var category = data[0];
-                            var name = data[1];
-                            var price = float.Parse(data[2]);
-                            if (category == Category && name == Name)
-                            {
-                                prices.Add(price);
-                            }
-                        }
+                        var number = float.Parse(line);
+                        prices.Add(number);
                         line = reader.ReadLine();
                     }
                 }

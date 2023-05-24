@@ -24,6 +24,8 @@
 
         public abstract Statistics GetStatistics();
 
+        protected List<float> prices = new List<float>();
+
 
     }
 }

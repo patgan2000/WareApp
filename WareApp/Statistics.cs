@@ -12,22 +12,22 @@
         {
             get
             {
-                return this.Sum / this.Count;
+                return Sum / Count;
             }
         }
 
         public Statistics()
         {
-            this.Count = 0;
-            this.Sum = 0;
-            this.Max = 0;
+            Count = 0;
+            Sum = 0;
+            Max = 0;
         }
 
         public void AddPrice(float price)
         {
-            this.Count++;
-            this.Sum += price;
-            this.Max = Math.Max(this.Max, price);
+            Count++;
+            Sum += price;
+            Max = Math.Max(this.Max, price);
         }
     }
 }

@@ -4,10 +4,6 @@ namespace WareApp
 {
     public class WareInMemory : WareBase
     {
-        public override event PriceAddedDelegate PriceAdded;
-
-        private List<float> prices = new List<float>();
-
         public WareInMemory(string name, string category)
             : base(name, category)
         {
@@ -17,11 +13,8 @@ namespace WareApp
         {
             if (price > 0)
             {
-                this.prices.Add(price);
-                if (PriceAdded != null)
-                {
-                    PriceAdded(this, new EventArgs());
-                }
+                prices.Add(price);
+                OnPriceAdded();
             }
             else
             {
@@ -33,11 +26,8 @@ namespace WareApp
         {
             if (price > 0)
             {
-                this.prices.Add((float)price);
-                if (PriceAdded != null)
-                {
-                    PriceAdded(this, new EventArgs());
-                }
+                prices.Add((float)price);
+                OnPriceAdded();
             }
             else
             {

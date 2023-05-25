@@ -16,6 +16,6 @@ namespace WareApp
 
         Statistics GetStatistics();
 
-        event PriceAddedDelegate PriceAdded;
+        event EventHandler PriceAdded;
     }
 }

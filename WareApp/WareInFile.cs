@@ -2,8 +2,6 @@
 {
     public class WareInFile : WareBase
     {
-        public override event PriceAddedDelegate PriceAdded;
-
         private const string fileName = "wares.txt";
 
         public WareInFile(string name, string category)
@@ -15,15 +13,9 @@
         {
             if (price > 0)
             {
-                this.prices.Add(price);
-                using (var writer = File.AppendText(fileName))
-                {
-                    writer.WriteLine($"{price}");
-                    if (PriceAdded != null)
-                    {
-                        PriceAdded(this, new EventArgs());
-                    }
-                }
+                prices.Add(price);
+                WritePriceToFile(price);
+                OnPriceAdded();
             }
             else
             {
@@ -41,7 +33,7 @@
         {
             if (float.TryParse(price, out float result))
             {
-                this.AddPrice(result);
+                AddPrice(result);
             }
             else
             {
@@ -51,46 +43,56 @@
                 }
                 else
                 {
-                    this.AddPrice(price[0]);
+                    if(float.TryParse(price,out float singleCharPrice))
+                    {
+                        AddPrice(singleCharPrice);
+                    }
+                    else
+                    {
+                        throw new Exception("Invalid price value.");
+                    }
                 }
             }
         }
 
         public override Statistics GetStatistics()
         {
-            var result = CountStatistic(prices);
-            return result;
+            var pricesFromFile = ReadPricesFromFile();
+            var statistics = new Statistics();
+
+            foreach(var price in pricesFromFile)
+            {
+                statistics.AddPrice(price);
+            }
+            return statistics;
         }
 
-        private List<float> ReadPricesFromFile()
+        private void WritePriceToFile(float price)
+        {
+            using(var writer = File.AppendText(fileName))
+            {
+                writer.WriteLine(price.ToString());
+            }
+        }
+
+        public List<float> ReadPricesFromFile()
         {
             var prices = new List<float>();
             if (File.Exists(fileName))
             {
                 using (var reader = File.OpenText(fileName))
                 {
-                    var line = reader.ReadLine();
-                    while (line != null)
+                    string line;
+                    while((line = reader.ReadLine()) != null)
                     {
-                        var number = float.Parse(line);
-                        prices.Add(number);
-                        line = reader.ReadLine();
+                        if(float.TryParse(line, out float number))
+                        {
+                            prices.Add(number);
+                        }
                     }
                 }
             }
             return prices;
-        }
-
-        private Statistics CountStatistic(List<float> prices)
-        {
-            var statistics = new Statistics();
-
-            foreach (var price in ReadPricesFromFile())
-            {
-                statistics.AddPrice(price);
-            }
-
-            return statistics;
         }
     }
 }

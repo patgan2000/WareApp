@@ -38,8 +38,6 @@ namespace WareAppTests
             ware3.AddPrice(20);
             ware3.AddPrice(30);
 
-            var statistics = new Statistics();
-
             var statistics1 = ware1.GetStatistics();
             var statistics2 = ware2.GetStatistics();
             var statistics3 = ware3.GetStatistics();

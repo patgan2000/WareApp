@@ -2,14 +2,12 @@
 {
     public abstract class WareBase : IWare
     {
-        public delegate void PriceAddedDelegate(object senger, EventArgs args);
-
-        public abstract event PriceAddedDelegate PriceAdded;
+        public event EventHandler PriceAdded;
 
         public WareBase(string name, string category)
         {
-            this.Name = name;
-            this.Category = category;
+            Name = name;
+            Category = category;
         }
 
         public string Name { get; private set; }
@@ -25,6 +23,11 @@
         public abstract Statistics GetStatistics();
 
         protected List<float> prices = new List<float>();
+
+        protected virtual void OnPriceAdded()
+        {
+            PriceAdded?.Invoke(this, EventArgs.Empty);  
+        }
 
 
     }

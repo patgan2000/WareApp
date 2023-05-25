@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-
-namespace WareApp
+﻿namespace WareApp
 {
     class Program
     {
@@ -26,20 +22,20 @@ namespace WareApp
                     Console.WriteLine();
                     Console.WriteLine("Statistics for the 'clothes' category:");
                     Console.WriteLine($"AVR: {clothesStatistics.Avr}");
-                    Console.WriteLine($"Count: {clothesStatistics.Sum}");
-                    Console.WriteLine($"Max: {clothesStatistics.Max}");
+                    Console.WriteLine($"SUM: {clothesStatistics.Sum}");
+                    Console.WriteLine($"MAX: {clothesStatistics.Max}");
 
                     Console.WriteLine();
                     Console.WriteLine("Statistics for the 'shoes' category:");
                     Console.WriteLine($"AVR: {shoesStatistics.Avr}");
-                    Console.WriteLine($"Count: {shoesStatistics.Sum}");
-                    Console.WriteLine($"Max: {shoesStatistics.Max}");
+                    Console.WriteLine($"SUM: {shoesStatistics.Sum}");
+                    Console.WriteLine($"MAX: {shoesStatistics.Max}");
 
                     Console.WriteLine();
                     Console.WriteLine("Statistics for the 'others' category:");
                     Console.WriteLine($"AVR: {othersStatistics.Avr}");
-                    Console.WriteLine($"Count: {othersStatistics.Sum}");
-                    Console.WriteLine($"Max: {othersStatistics.Max}");
+                    Console.WriteLine($"SUM: {othersStatistics.Sum}");
+                    Console.WriteLine($"MAX: {othersStatistics.Max}");
                     break;
                 }
 
@@ -49,7 +45,7 @@ namespace WareApp
                 Console.WriteLine("1 - clothes");
                 Console.WriteLine("2 - shoes");
                 Console.WriteLine("3 - others");
-                Console.Write("Wybierz numer kategorii: ");
+                Console.Write("Choose category number: ");
                 string categoryInput = Console.ReadLine();
 
                 if (!int.TryParse(categoryInput, out int categoryNumber) || categoryNumber < 1 || categoryNumber > 3)
@@ -75,36 +71,45 @@ namespace WareApp
                         break;
                 }
 
-                Console.WriteLine("Enter article price:");
-                string priceInput = Console.ReadLine();
+                float price = 0;
+                bool isValidPrice = false;
 
-                if (float.TryParse(priceInput, out float price))
+                while (!isValidPrice)
                 {
-                    if (category == "clothes")
-                    {
-                        var wareInFile = new WareInFile(name, category);
-                        wareInFile.AddPrice(price);
-                        clothesStatistics = wareInFile.GetStatistics();
-                    }
-                    else if (category == "shoes")
-                    {
-                        var wareInMemory = new WareInMemory(name, category);
-                        wareInMemory.AddPrice(price);
-                        shoesStatistics = wareInMemory.GetStatistics();
-                    }
-                    else if (category == "others")
-                    {
-                        var wareInMemory = new WareInMemory(name, category);
-                        wareInMemory.AddPrice(price);
-                        othersStatistics = wareInMemory.GetStatistics();
-                    }
+                    Console.WriteLine("Enter article price:");
+                    string priceInput = Console.ReadLine();
 
-                    Console.WriteLine("The product information has been saved.");
+                    if (float.TryParse(priceInput, out price))
+                    {
+                        isValidPrice = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid price. Try again.");
+                    }
                 }
-                else
+
+                if (category == "clothes")
                 {
-                    Console.WriteLine("Invalid price. Try again.");
+                    var wareInFile = new WareInFile(name, category);
+                    wareInFile.AddPrice(price);
+                    clothesStatistics = wareInFile.GetStatistics();
                 }
+                else if (category == "shoes")
+                {
+                    var wareInMemory = new WareInMemory(name, category);
+                    wareInMemory.AddPrice(price);
+                    shoesStatistics = wareInMemory.GetStatistics();
+                }
+                else if (category == "others")
+                {
+                    var wareInMemory = new WareInMemory(name, category);
+                    wareInMemory.AddPrice(price);
+                    othersStatistics = wareInMemory.GetStatistics();
+                }
+
+                Console.WriteLine("The product information has been saved.");
+
             }
         }
     }

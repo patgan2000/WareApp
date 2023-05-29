@@ -97,15 +97,15 @@
                 }
                 else if (category == "shoes")
                 {
-                    var wareInMemory = new WareInMemory(name, category);
-                    wareInMemory.AddPrice(price);
-                    shoesStatistics = wareInMemory.GetStatistics();
+                    var wareInFile = new WareInFile(name, category);
+                    wareInFile.AddPrice(price);
+                    shoesStatistics = wareInFile.GetStatistics();
                 }
                 else if (category == "others")
                 {
-                    var wareInMemory = new WareInMemory(name, category);
-                    wareInMemory.AddPrice(price);
-                    othersStatistics = wareInMemory.GetStatistics();
+                    var wareInFile = new WareInFile(name, category);
+                    wareInFile.AddPrice(price);
+                    othersStatistics = wareInFile.GetStatistics();
                 }
 
                 Console.WriteLine("The product information has been saved.");

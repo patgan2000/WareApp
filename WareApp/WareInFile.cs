@@ -4,9 +4,12 @@
     {
         private const string fileName = "wares.txt";
 
+        private readonly string filePath;
+
         public WareInFile(string name, string category)
             :base(name, category)
         {
+            filePath = $"{category}_wares.txt";
         }
 
         public override void AddPrice(float price)
@@ -69,7 +72,7 @@
 
         private void WritePriceToFile(float price)
         {
-            using(var writer = File.AppendText(fileName))
+            using(var writer = File.AppendText(filePath))
             {
                 writer.WriteLine(price.ToString());
             }
@@ -78,9 +81,9 @@
         public List<float> ReadPricesFromFile()
         {
             var prices = new List<float>();
-            if (File.Exists(fileName))
+            if (File.Exists(filePath))
             {
-                using (var reader = File.OpenText(fileName))
+                using (var reader = File.OpenText(filePath))
                 {
                     string line;
                     while((line = reader.ReadLine()) != null)
